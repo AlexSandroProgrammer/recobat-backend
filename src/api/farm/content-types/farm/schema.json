@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "farms",
+  "info": {
+    "singularName": "farm",
+    "pluralName": "farms",
+    "displayName": "farm",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nameFarm": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "string"
+    },
+    "altitude": {
+      "type": "string"
+    },
+    "codeFarm": {
+      "type": "string"
+    },
+    "users_permissions_users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "farms"
+    }
+  }
+}

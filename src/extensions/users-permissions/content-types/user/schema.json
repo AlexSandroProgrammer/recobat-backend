@@ -73,6 +73,12 @@
     },
     "document": {
       "type": "uid"
+    },
+    "farms": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::farm.farm",
+      "mappedBy": "users_permissions_users"
     }
   }
 }
