@@ -398,11 +398,43 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiCropTypeCropType extends Struct.CollectionTypeSchema {
+  collectionName: 'crop_types';
+  info: {
+    displayName: 'CropType';
+    pluralName: 'crop-types';
+    singularName: 'crop-type';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::crop-type.crop-type'
+    > &
+      Schema.Attribute.Private;
+    nameCrop: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    transitional_crops: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::transitional-crop.transitional-crop'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiFarmFarm extends Struct.CollectionTypeSchema {
   collectionName: 'farms';
   info: {
     description: '';
-    displayName: 'farm';
+    displayName: 'Farm';
     pluralName: 'farms';
     singularName: 'farm';
   };
@@ -421,12 +453,13 @@ export interface ApiFarmFarm extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::farm.farm'> &
       Schema.Attribute.Private;
     nameFarm: Schema.Attribute.String;
+    plots: Schema.Attribute.Relation<'oneToMany', 'api::plot.plot'>;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users_permissions_users: Schema.Attribute.Relation<
-      'manyToMany',
+    user: Schema.Attribute.Relation<
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
   };
@@ -458,6 +491,66 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     siteDescription: Schema.Attribute.Text & Schema.Attribute.Required;
     siteName: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPlotPlot extends Struct.CollectionTypeSchema {
+  collectionName: 'plots';
+  info: {
+    displayName: 'Plot';
+    pluralName: 'plots';
+    singularName: 'plot';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    farm: Schema.Attribute.Relation<'manyToOne', 'api::farm.farm'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::plot.plot'> &
+      Schema.Attribute.Private;
+    namePlot: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    size: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTransitionalCropTransitionalCrop
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'transitional_crops';
+  info: {
+    displayName: 'TransitionalCrop';
+    pluralName: 'transitional-crops';
+    singularName: 'transitional-crop';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    crop_types: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::crop-type.crop-type'
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::transitional-crop.transitional-crop'
+    > &
+      Schema.Attribute.Private;
+    nameCrop: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -933,7 +1026,7 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
-    farms: Schema.Attribute.Relation<'manyToMany', 'api::farm.farm'>;
+    farms: Schema.Attribute.Relation<'oneToMany', 'api::farm.farm'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -954,6 +1047,7 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.role'
     >;
     surnames: Schema.Attribute.String;
+    telephone: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -977,8 +1071,11 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::about.about': ApiAboutAbout;
+      'api::crop-type.crop-type': ApiCropTypeCropType;
       'api::farm.farm': ApiFarmFarm;
       'api::global.global': ApiGlobalGlobal;
+      'api::plot.plot': ApiPlotPlot;
+      'api::transitional-crop.transitional-crop': ApiTransitionalCropTransitionalCrop;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

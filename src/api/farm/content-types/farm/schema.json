@@ -4,7 +4,7 @@
   "info": {
     "singularName": "farm",
     "pluralName": "farms",
-    "displayName": "farm",
+    "displayName": "Farm",
     "description": ""
   },
   "options": {
@@ -27,11 +27,17 @@
     "codeFarm": {
       "type": "string"
     },
-    "users_permissions_users": {
+    "user": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "farms"
+    },
+    "plots": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::plot.plot",
+      "mappedBy": "farm"
     }
   }
 }

@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plots",
+  "info": {
+    "singularName": "plot",
+    "pluralName": "plots",
+    "displayName": "Plot"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "namePlot": {
+      "type": "string"
+    },
+    "size": {
+      "type": "string"
+    },
+    "farm": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::farm.farm",
+      "inversedBy": "plots"
+    }
+  }
+}
