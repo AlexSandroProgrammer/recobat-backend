@@ -401,6 +401,7 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
 export interface ApiCropTypeCropType extends Struct.CollectionTypeSchema {
   collectionName: 'crop_types';
   info: {
+    description: '';
     displayName: 'CropType';
     pluralName: 'crop-types';
     singularName: 'crop-type';
@@ -412,6 +413,10 @@ export interface ApiCropTypeCropType extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    crop_variations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::crop-variation.crop-variation'
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -420,10 +425,45 @@ export interface ApiCropTypeCropType extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     nameCrop: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    transitional_crops: Schema.Attribute.Relation<
-      'manyToMany',
+    scientificName: Schema.Attribute.String;
+    transitional_crop: Schema.Attribute.Relation<
+      'manyToOne',
       'api::transitional-crop.transitional-crop'
     >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiCropVariationCropVariation
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'crop_variations';
+  info: {
+    displayName: 'CropVariation';
+    pluralName: 'crop-variations';
+    singularName: 'crop-variation';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    crop_type: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::crop-type.crop-type'
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::crop-variation.crop-variation'
+    > &
+      Schema.Attribute.Private;
+    nameVariation: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    scientificName: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -452,9 +492,11 @@ export interface ApiFarmFarm extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::farm.farm'> &
       Schema.Attribute.Private;
+    longitude: Schema.Attribute.String;
     nameFarm: Schema.Attribute.String;
     plots: Schema.Attribute.Relation<'oneToMany', 'api::plot.plot'>;
     publishedAt: Schema.Attribute.DateTime;
+    telephone: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -540,7 +582,7 @@ export interface ApiTransitionalCropTransitionalCrop
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     crop_types: Schema.Attribute.Relation<
-      'manyToMany',
+      'oneToMany',
       'api::crop-type.crop-type'
     >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1072,6 +1114,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::about.about': ApiAboutAbout;
       'api::crop-type.crop-type': ApiCropTypeCropType;
+      'api::crop-variation.crop-variation': ApiCropVariationCropVariation;
       'api::farm.farm': ApiFarmFarm;
       'api::global.global': ApiGlobalGlobal;
       'api::plot.plot': ApiPlotPlot;

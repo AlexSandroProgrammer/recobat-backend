@@ -4,7 +4,8 @@
   "info": {
     "singularName": "crop-type",
     "pluralName": "crop-types",
-    "displayName": "CropType"
+    "displayName": "CropType",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -14,11 +15,20 @@
     "nameCrop": {
       "type": "string"
     },
-    "transitional_crops": {
+    "transitional_crop": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "api::transitional-crop.transitional-crop",
       "inversedBy": "crop_types"
+    },
+    "scientificName": {
+      "type": "string"
+    },
+    "crop_variations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::crop-variation.crop-variation",
+      "mappedBy": "crop_type"
     }
   }
 }

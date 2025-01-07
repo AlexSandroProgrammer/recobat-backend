@@ -16,9 +16,9 @@
     },
     "crop_types": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "oneToMany",
       "target": "api::crop-type.crop-type",
-      "mappedBy": "transitional_crops"
+      "mappedBy": "transitional_crop"
     }
   }
 }

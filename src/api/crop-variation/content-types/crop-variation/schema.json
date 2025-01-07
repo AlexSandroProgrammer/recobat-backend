@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "crop_variations",
+  "info": {
+    "singularName": "crop-variation",
+    "pluralName": "crop-variations",
+    "displayName": "CropVariation"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nameVariation": {
+      "type": "string"
+    },
+    "scientificName": {
+      "type": "string"
+    },
+    "crop_type": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::crop-type.crop-type",
+      "inversedBy": "crop_variations"
+    }
+  }
+}

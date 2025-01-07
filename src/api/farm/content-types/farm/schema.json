@@ -38,6 +38,12 @@
       "relation": "oneToMany",
       "target": "api::plot.plot",
       "mappedBy": "farm"
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "longitude": {
+      "type": "string"
     }
   }
 }
